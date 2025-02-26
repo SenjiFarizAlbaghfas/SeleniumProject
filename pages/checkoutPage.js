@@ -1,0 +1,32 @@
+const { By } = require("selenium-webdriver");
+const assert = require("assert");
+
+class CheckoutPage{
+    constructor(driver){
+        this.driver = driver;
+        this.btnCartIcon = By.className("shopping_cart_link");
+        this.btnCheckout = By.css("#checkout");
+        this.firstNameField = By.css("#first-name");
+        this.lastNameField = By.css("#last-name");
+        this.zipCodeField = By.css("#postal-code");
+        this.continueBtn = By.id('continue');
+        this.finishBtn = By.id('finish');
+    }
+
+    async finishCheckout(firstname, lastname, postalcode){
+        await this.driver.findElement(this.btnCartIcon).click();
+        await this.driver.findElement(this.btnCheckout).click();
+        await this.driver.findElement(this.firstNameField).sendKeys(firstname);
+        await this.driver.findElement(this.lastNameField).sendKeys(lastname);
+        await this.driver.findElement(this.zipCodeField).sendKeys(postalcode);
+        await this.driver.findElement(this.continueBtn).click();
+        await this.driver.findElement(this.finishBtn).click();
+    }
+
+    async isOnCheckoutCompletePage(){
+        const title = await this.driver.findElement(By.className('title'));
+        return title.getText();
+    }
+}
+
+module.exports = CheckoutPage;
